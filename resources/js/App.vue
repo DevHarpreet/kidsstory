@@ -1,3 +1,197 @@
 <template>
-    Hello
+ 
+    
+    <header class="header">
+        <div class="container nav">
+        <a class="brand" href="#home" aria-label="KidsStory home"><span class="elephant">🐘</span><span>KidsStory</span></a>
+        <nav class="navlinks" aria-label="Main navigation">
+            <a class="active" href="#home">Home</a><a href="#categories">Categories</a><a href="#library" data-toast="Your library is ready for your favourite stories!">My Library</a><a href="#search" data-search-focus>Search</a>
+        </nav>
+        <div class="profile"><span class="avatar">🧒🏻</span><input id="search" class="search" type="search" placeholder="Search stories…" aria-label="Search stories" /></div>
+        </div>
+    </header>
+    <div class="hero-wrap" id="home"><div class="container">
+        <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy"><p class="eyebrow">Hero Banner</p><h1 id="hero-title">Adventures Await!</h1><p class="description">Discover the Magic of Indian Folk Tales and Legends.</p><a class="btn" href="#stories">READ NOW&nbsp; →</a></div>
+        <div class="hero-art" aria-hidden="true"><span>🐘</span><span>🧒🏽</span><span>👧🏻</span><span>🦚</span></div>
+        </section>
+    </div></div>
+    <main class="container">
+        <section id="categories"><h2 class="section-title">Category Icons</h2>
+        <div class="categories">
+           <CategoryCard v-for="category in categoriesList" :card="category" :key="category.id" />
+        </div>
+        </section>
+        <section id="stories"><h2 class="section-title">Recommended for You</h2>
+        <div class="story-grid" id="storyGrid">
+            <StoryCard v-for="story in StoryList" :key="story.id" :card="story" />
+        </div>
+        <p id="noResults" hidden style="padding:20px 0;color:var(--muted)">No stories found. Try another search.</p>
+        </section>
+    </main>
+    <footer><div class="container"><div class="footer-top"><a href="#home" class="footer-brand">KidsStory</a><nav class="footer-links"><a href="#about" data-toast="KidsStory brings Indian folk tales to young readers.">About</a><a href="#faq" data-toast="More answers are coming soon!	">FAQ</a><a href="#privacy" data-toast="Your privacy matters to us.">Privacy</a><a href="#social" data-toast="Social links can be connected here.">Social</a></nav></div><div class="socials" aria-label="Social links"><span>f</span><span>♥</span><span>◎</span><span>▶</span><span>♪</span></div><div class="copyright">© 2026 KidsStory · Stories, imagination &amp; little adventures.</div></div></footer>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+   
+    
 </template>
+
+ <style>
+        :root { color-scheme: light dark; --ink: light-dark(#20201d,#f8f5ee); --paper: light-dark(#fff8ed,#171f22); --muted: light-dark(#53636a,#c0cbd0); --teal: #0e4e5c; --orange: #f0784b; --yellow: #ffc746; }
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: ui-rounded, "Trebuchet MS", system-ui, sans-serif; color: var(--ink); background: var(--paper); }
+        .app { min-height: 100vh; background: var(--paper); overflow: hidden; }
+        .container { width: min(1120px, calc(100% - 40px)); margin-inline: auto; }
+        .header { background: light-dark(#fffdf9,#20282b); border-bottom: 1px solid light-dark(#eee4d7,#354146); }
+        .nav { min-height: 76px; display:flex; align-items:center; justify-content:space-between; gap:20px; }
+        .brand { display:flex; align-items:center; gap:7px; font-size:25px; font-weight:900; letter-spacing:-1.3px; color:#e77b51; white-space:nowrap; }
+        .brand .elephant { font-size:29px; }
+        .navlinks { display:flex; align-items:center; gap:27px; font-size:14px; color:var(--ink); }
+        .navlinks a { text-decoration:none; color:inherit; padding:28px 0 24px; border-bottom:3px solid transparent; }
+        .navlinks a.active { color:#dc7a4b; border-color:#dc7a4b; }
+        .profile { display:flex; align-items:center; gap:10px; }
+        .avatar { width:34px; height:34px; border-radius:50%; background:#c7e8e8; display:grid; place-items:center; font-size:21px; }
+        .search { border:0; outline:0; border-radius:999px; padding:11px 16px; width:155px; background:light-dark(#f0efed,#394246); color:var(--ink); }
+        .hero-wrap { background:var(--orange); padding:18px 0 0; border-radius:0 0 48% 48% / 0 0 8% 8%; }
+        .hero { position:relative; min-height:300px; border-radius:30px; overflow:hidden; display:flex; align-items:center; padding:38px 42px; color:#fff; background:radial-gradient(circle at 77% 34%,#4f9c9d 0 9%,transparent 10%),linear-gradient(110deg,#15505b 0%,#0b4654 57%,#2c777b 100%); box-shadow:0 12px 24px #653d2520; }
+        .hero:before { content:""; position:absolute; inset:0 0 0 48%; opacity:.9; background:radial-gradient(ellipse at 72% 16%,#f5d89a 0 7%,transparent 7.5%),radial-gradient(ellipse at 87% 35%,#f2a74e 0 8%,transparent 8.5%),radial-gradient(ellipse at 67% 52%,#efcf75 0 10%,transparent 10.5%),radial-gradient(ellipse at 90% 77%,#8cc8a4 0 11%,transparent 11.5%),radial-gradient(ellipse at 51% 81%,#d9a86b 0 10%,transparent 10.5%); }
+        .hero:after { content:""; position:absolute; right:-2%; bottom:-20px; width:56%; height:48%; background:radial-gradient(ellipse at 50% 100%,#183d3d 0 38%,transparent 39%); opacity:.75; }
+        .hero-copy { position:relative; z-index:2; max-width:490px; }
+        .eyebrow { font-size:15px; margin:0 0 5px; opacity:.9; }
+        h1 { margin:0; font-size:clamp(32px,4.5vw,52px); line-height:1.03; letter-spacing:-1.5px; }
+        .hero p.description { font-size:18px; line-height:1.4; margin:12px 0 20px; max-width:365px; }
+        .btn { display:inline-flex; align-items:center; justify-content:center; border:0; border-radius:999px; padding:12px 25px; background:var(--yellow); color:#28251d; font-weight:800; font-size:14px; text-decoration:none; cursor:pointer; box-shadow:0 3px 0 #d6a12f; transition:transform .15s ease; }
+        .btn:hover { transform:translateY(-2px); }
+        .hero-art { z-index:1; position:absolute; right:5%; bottom:18px; display:flex; align-items:end; gap:3px; filter:drop-shadow(0 7px 3px #123c3c55); }
+        .hero-art span { display:block; font-size:clamp(45px,7vw,82px); animation:bob 3s ease-in-out infinite; }
+        .hero-art span:nth-child(2) { animation-delay:.3s; font-size:clamp(52px,7.5vw,91px); }
+        .hero-art span:nth-child(3) { animation-delay:.6s; }
+        @keyframes bob { 0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)} }
+        main { padding:28px 0 42px; }
+        .section-title { margin:0 0 15px; font-size:21px; letter-spacing:-.4px; }
+        .categories { display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); gap:12px; margin-bottom:34px; }
+        .category { border-radius:18px; padding:12px 8px 11px; min-height:112px; display:flex; flex-direction:column; align-items:center; justify-content:space-between; text-align:center; color:#29251f; background:#f9dfb9; transition:transform .18s ease; }
+        .category:hover { transform:translateY(-4px) rotate(-1deg); }
+        .category:nth-child(2){background:#f3e0c5}.category:nth-child(3){background:#e9b17d}.category:nth-child(4){background:#ffd44e}.category:nth-child(5){background:#8dbd76}.category:nth-child(6){background:#d9e0f0}.category:nth-child(7){background:#f9d3be}
+        .category .emoji { font-size:37px; line-height:1.2; }
+        .category strong { font-size:12px; line-height:1.15; }
+        .story-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:18px; }
+        .story { min-width:0; border-radius:25px; overflow:hidden; color:#172b2b; box-shadow:0 5px 12px #3c35221b; transition:transform .2s ease,box-shadow .2s ease; }
+        .story:hover { transform:translateY(-5px); box-shadow:0 12px 20px #3c352225; }
+        .story:nth-child(1){background:#5cbdb6}.story:nth-child(2){background:#ffd052}.story:nth-child(3){background:#65b45d}.story:nth-child(4){background:#f18a50}
+        .story-image { height:175px; display:grid; place-items:center; position:relative; overflow:hidden; background:linear-gradient(180deg,#ffffff30,transparent); }
+        .story-image:before { content:""; position:absolute; width:160px; height:120px; bottom:-48px; border-radius:50%; background:#ffffff27; }
+        .story-image .scene { font-size:83px; z-index:1; filter:drop-shadow(0 7px 3px #17352a35); }
+        .pill { position:absolute; top:12px; left:12px; border-radius:999px; padding:5px 9px; background:#fffaf0; color:#26231d; font-size:11px; font-weight:800; z-index:2; }
+        .age { left:auto; right:10px; }
+        .story-body { padding:14px 16px 18px; }
+        .story h3 { margin:0 0 14px; font-size:19px; line-height:1.18; letter-spacing:-.4px; min-height:45px; }
+        .story-meta { display:flex; justify-content:space-between; align-items:center; font-size:12px; margin-bottom:13px; }
+        .rating { background:#fff8e8; padding:4px 8px; border-radius:999px; }
+        .read { display:block; margin:7px auto 0; width:max-content; padding:7px 13px; border-radius:999px; background:#fff8e8; color:#28251e; text-decoration:none; font-size:12px; border:0; cursor:pointer; }
+        .read:hover { background:white; }
+        footer { background:#0d4b59; color:#fff8ed; padding:23px 0 15px; border-radius:28px 28px 0 0; }
+        .footer-top { display:flex; align-items:center; justify-content:space-between; gap:20px; }
+        .footer-brand { font-size:23px; color:#e88966; font-weight:900; letter-spacing:-1px; }
+        .footer-links { display:flex; gap:24px; flex-wrap:wrap; }
+        .footer-links a { color:inherit; font-size:13px; text-decoration:none; }
+        .socials { display:flex; justify-content:flex-end; gap:8px; margin-top:13px; }
+        .socials span { width:25px; height:25px; border-radius:50%; background:#fff7e8; color:#0d4b59; display:grid; place-items:center; font-weight:900; font-size:11px; }
+        .copyright { text-align:center; font-size:10px; opacity:.75; margin-top:15px; }
+        .toast { position:fixed; bottom:22px; left:50%; transform:translate(-50%,20px); background:#173f47; color:white; padding:12px 18px; border-radius:999px; opacity:0; pointer-events:none; transition:.2s; z-index:10; box-shadow:0 5px 25px #0003; }
+        .toast.show { opacity:1; transform:translate(-50%,0); }
+        @media(max-width:760px){.container{width:min(100% - 28px,600px)}.nav{flex-wrap:wrap;padding:13px 0}.navlinks{order:3;width:100%;justify-content:space-between;gap:10px}.navlinks a{padding:9px 0 5px;font-size:13px}.profile{margin-left:auto}.search{width:110px}.hero{min-height:360px;padding:28px 25px;align-items:flex-start}.hero-copy{max-width:100%}.hero p.description{max-width:300px}.hero-art{right:4%;bottom:8px}.hero-art span{font-size:55px}.hero-art span:nth-child(2){font-size:65px}.hero:before{inset:35% 0 0 0}.categories{grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}.category{min-height:100px}.category .emoji{font-size:31px}.story-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.story-image{height:145px}.story-image .scene{font-size:68px}.story h3{font-size:17px}.footer-top{align-items:flex-start;flex-direction:column}.footer-links{gap:18px}.socials{justify-content:flex-start}}
+        @media(max-width:390px){.brand{font-size:21px}.profile .avatar{display:none}.search{width:95px}.hero{min-height:380px}.categories{grid-template-columns:repeat(3,minmax(0,1fr))}.story-body{padding:12px}.story h3{font-size:16px}}
+</style>
+
+<script setup>
+import { ref } from 'vue';
+import CategoryCard from './CategoryCard.vue';
+import StoryCard from './StoryCard.vue';
+
+const categoriesList = [
+    {
+        'id': 1,
+        'title': 'Panchatantra',
+        'link': '#stories',
+        'emoji': '🦁',
+        'category': 'Panchatantra'
+    },
+    {
+        'id': 2,
+        'title': 'Moral Stories',
+        'link': '#stories',
+        'emoji': '🦉',
+        'category': 'Moral Stories'
+    },
+    {
+        'id': 3,
+        'title': 'Ganesha Stories',
+        'link': '#stories',
+        'emoji': '🐘',
+        'category': 'Ganesha Stories'
+    },
+    {
+        'id': 4,
+        'title': 'The Talking',
+        'link': '#stories',
+        'emoji': '🏺',
+        'category': 'The Talking'
+    },
+    {
+        'id': 5,
+        'title': 'Akbar &amp; Birbal',
+        'link': '#stories',
+        'emoji': '👑',
+        'category': 'Akbar & Birbal'
+    },
+    {
+        'id': 6,
+        'title': 'Bedtime',
+        'link': '#stories',
+        'emoji': '🌙',
+        'category': 'Bedtime'
+    },
+    {
+        'id': 7,
+        'title': 'New Arrivals',
+        'link': '#stories',
+        'emoji': '💃🏻',
+        'category': 'New Arrivals'
+    }
+]
+
+const StoryList = [
+    {
+        'id': 1,
+        'title': 'The Ant & The Grasshopper',
+        'category': 'Panchatantra Moral Stories',
+        'ageGroup': '4-6',
+        'scene': '🐜🌿🦗',
+        'rating': '4.8'
+    },
+    {
+        'id': 2,
+        'title': "Krishna's Butter Pot",
+        'category': 'Moral Stories Ganesha Stories',
+        'ageGroup': '3-5',
+        'scene': '🧈🏺✨',
+        'rating': '4.9'
+    },
+    {
+        'id': 3,
+        'title': 'The Enchanted Forest',
+        'category': 'Panchatantra New Arrivals',
+        'ageGroup': '4-6',
+        'scene': '🐅🌳🦌',
+        'rating': '4.8'
+    },
+    {
+        'id': 4,
+        'title': 'The Brave Prince',
+        'category': 'New Arrivals Moral Stories',
+        'ageGroup': '6-7',
+        'scene': '🤴🏽🐎⭐',
+        'rating': '5.0'
+    }
+]
+</script>
