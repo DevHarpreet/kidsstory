@@ -27,7 +27,7 @@
         </section>
         <section id="stories"><h2 class="section-title">Recommended for You</h2>
         <div class="story-grid" id="storyGrid">
-            <StoryCard v-for="story in StoryList" :key="story.id" :card="story" />
+            <StoryCard v-for="story in storyList" :key="story.id" :card="story" />
         </div>
         <p id="noResults" hidden style="padding:20px 0;color:var(--muted)">No stories found. Try another search.</p>
         </section>
@@ -35,8 +35,71 @@
 </template>
 
 <script setup>
+    import { ref, onMounted } from 'vue';
     import CategoryCard from '../Common/CategoryCard.vue';
     import StoryCard from '../Common/StoryCard.vue';
+    import axios from 'axios';
+
+    const storyList = ref([]);
+
+    onMounted(async () => {
+        const resp = await axios.get(route('story.list'));
+        storyList.value = resp.data;
+    });
+
     
-    defineProps(['categoriesList', 'StoryList']);
+
+    const categoriesList = [
+        {
+            'id': 1,
+            'title': 'Panchatantra',
+            'link': '#stories',
+            'emoji': '🦁',
+            'category': 'Panchatantra'
+        },
+        {
+            'id': 2,
+            'title': 'Moral Stories',
+            'link': '#stories',
+            'emoji': '🦉',
+            'category': 'Moral Stories'
+        },
+        {
+            'id': 3,
+            'title': 'Ganesha Stories',
+            'link': '#stories',
+            'emoji': '🐘',
+            'category': 'Ganesha Stories'
+        },
+        {
+            'id': 4,
+            'title': 'The Talking',
+            'link': '#stories',
+            'emoji': '🏺',
+            'category': 'The Talking'
+        },
+        {
+            'id': 5,
+            'title': 'Akbar &amp; Birbal',
+            'link': '#stories',
+            'emoji': '👑',
+            'category': 'Akbar & Birbal'
+        },
+        {
+            'id': 6,
+            'title': 'Bedtime',
+            'link': '#stories',
+            'emoji': '🌙',
+            'category': 'Bedtime'
+        },
+        {
+            'id': 7,
+            'title': 'New Arrivals',
+            'link': '#stories',
+            'emoji': '💃🏻',
+            'category': 'New Arrivals'
+        }
+    ]
+
+    
 </script>
