@@ -41,65 +41,19 @@
     import axios from 'axios';
 
     const storyList = ref([]);
+    const categoriesList = ref([]);
 
     onMounted(async () => {
         const resp = await axios.get(route('story.list'));
         storyList.value = resp.data;
+
+        const categoriesResp = await axios.get(route('category.list'));
+        categoriesList.value = categoriesResp.data;
     });
 
     
 
-    const categoriesList = [
-        {
-            'id': 1,
-            'title': 'Panchatantra',
-            'link': '#stories',
-            'emoji': '🦁',
-            'category': 'Panchatantra'
-        },
-        {
-            'id': 2,
-            'title': 'Moral Stories',
-            'link': '#stories',
-            'emoji': '🦉',
-            'category': 'Moral Stories'
-        },
-        {
-            'id': 3,
-            'title': 'Ganesha Stories',
-            'link': '#stories',
-            'emoji': '🐘',
-            'category': 'Ganesha Stories'
-        },
-        {
-            'id': 4,
-            'title': 'The Talking',
-            'link': '#stories',
-            'emoji': '🏺',
-            'category': 'The Talking'
-        },
-        {
-            'id': 5,
-            'title': 'Akbar &amp; Birbal',
-            'link': '#stories',
-            'emoji': '👑',
-            'category': 'Akbar & Birbal'
-        },
-        {
-            'id': 6,
-            'title': 'Bedtime',
-            'link': '#stories',
-            'emoji': '🌙',
-            'category': 'Bedtime'
-        },
-        {
-            'id': 7,
-            'title': 'New Arrivals',
-            'link': '#stories',
-            'emoji': '💃🏻',
-            'category': 'New Arrivals'
-        }
-    ]
+    
 
     
 </script>

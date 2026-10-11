@@ -11,6 +11,6 @@ class StoryController extends Controller
     }
 
     public function storyList(){
-        return \App\Models\Story::with('ageGroups')->get();
+        return \App\Models\Story::with('ageGroups', 'categories')->get();
     }
 }
