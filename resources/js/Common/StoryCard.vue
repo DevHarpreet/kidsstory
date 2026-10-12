@@ -10,8 +10,10 @@
                 <span>⭐ 5</span><!-- will add it later -->
                 <span class="rating">{{ card.age_groups[0]?.title }} yrs</span>
             </div>
-            <button class="read" :data-story="card.title"><a :href='card.slug'>Read Story</a></button
-            ><button class="read" :data-story="card.title">♡ Save story</button>
+            <button class="read" :data-story="card.title">
+                <router-link :to="`/story-detail/${card.slug}`">Read Story</router-link>
+            </button>
+            <button class="read" :data-story="card.title">♡ Save story</button>
         </div>
     </article>
 </template>
