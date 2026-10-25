@@ -2,6 +2,7 @@
  
     <!-- Admin -->
      <div v-if="route.path.startsWith('/admin')">
+        <AdminNav />
         <router-view />
      </div>
     <div v-else>
@@ -16,6 +17,8 @@
 <script setup>
 
 import { useRoute } from 'vue-router';
+
+import AdminNav from './admin/AdminNav.vue';
 
 import Header from './Header/Header.vue';
 import Footer from './Footer/Footer.vue';
