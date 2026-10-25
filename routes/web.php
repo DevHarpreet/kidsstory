@@ -16,6 +16,13 @@ Route::get('/stories', [\App\Http\Controllers\StoryController::class, 'index']);
 
 Route::get('/{any}', function () {
       return view('app');
-  })->where('any',  '^(?!api).*$');
+  })->where('any',  '^(?!api|admin).*$');
 
 
+
+
+//Admin URLs
+
+Route::get('/admin/{any}', function() {
+    return view ('app');
+})->where('any', '.*');

@@ -6,4 +6,8 @@ Route::get('/stories-list', [\App\Http\Controllers\StoryController::class, 'stor
 Route::get('/category-list', [\App\Http\Controllers\CategoryController::class, 'index'])->name('category.list');
 
 Route::get('story-detail/{slug}', [\App\Http\Controllers\StoryController::class, 'getStory'])->name('story.detail');
+
+
+//Admin URLS
+Route::post('/admin/stories/store', [\App\Http\Controllers\StoryController::class, 'store'])->name('story.store');
 ?>
