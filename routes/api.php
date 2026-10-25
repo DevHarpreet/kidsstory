@@ -10,4 +10,5 @@ Route::get('story-detail/{slug}', [\App\Http\Controllers\StoryController::class,
 
 //Admin URLS
 Route::post('/admin/stories/store', [\App\Http\Controllers\StoryController::class, 'store'])->name('story.store');
+Route::post('/admin/categories/store', [\App\Http\Controllers\CategoryController::class, 'store'])->name('store.category');
 ?>
